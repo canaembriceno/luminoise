@@ -283,6 +283,7 @@ export function paintLumini(image, params) {
   const data = img.data;
   const seed = params.seed | 0;
 
+<<<<<<< HEAD
   try { kuwahara(data, w, h, params.smooth); } catch (err) {
     throw new Error("error en kuwahara: " + (err && err.message ? err.message : err));
   }
@@ -301,6 +302,14 @@ export function paintLumini(image, params) {
   try { grain(data, params.grain, seed); } catch (err) {
     throw new Error("error en grain: " + (err && err.message ? err.message : err));
   }
+=======
+  kuwahara(data, w, h, params.smooth);
+  toneAdjust(data, params.sat, params.light);
+  interpretLight(data, params.intensity, params.hue, params.chroma);
+  const assign = paintRegions(data, params.colors, seed);
+  contour(data, assign, w, h, params.contour);
+  grain(data, params.grain, seed);
+>>>>>>> fa699d704f08c1331de10857f75a330677b0b45e
 
   cx.putImageData(img, 0, 0);
   return { canvas: cv, w, h };

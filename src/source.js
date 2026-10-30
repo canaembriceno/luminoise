@@ -8,6 +8,7 @@ function toGridCanvas(sourceImage, gridW, gridH) {
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
 
+<<<<<<< HEAD
   try {
     if (sourceImage instanceof HTMLCanvasElement) {
       ctx.drawImage(sourceImage, 0, 0, gridW, gridH);
@@ -24,6 +25,20 @@ function toGridCanvas(sourceImage, gridW, gridH) {
     }
   } catch (err) {
     throw new Error("error dibujando en grid: " + (err && err.message ? err.message : err));
+=======
+  if (sourceImage instanceof HTMLCanvasElement) {
+    ctx.drawImage(sourceImage, 0, 0, gridW, gridH);
+  } else if (sourceImage instanceof HTMLImageElement || sourceImage instanceof HTMLVideoElement || sourceImage instanceof ImageBitmap) {
+    ctx.drawImage(sourceImage, 0, 0, gridW, gridH);
+  } else if (sourceImage && sourceImage.data && sourceImage.width) {
+    const full = document.createElement("canvas");
+    full.width = sourceImage.width;
+    full.height = sourceImage.height;
+    full.getContext("2d").putImageData(sourceImage, 0, 0);
+    ctx.drawImage(full, 0, 0, gridW, gridH);
+  } else {
+    throw new Error("Fuente de imagen no soportada");
+>>>>>>> fa699d704f08c1331de10857f75a330677b0b45e
   }
 
   return ctx.getImageData(0, 0, gridW, gridH);
@@ -79,6 +94,7 @@ export function buildSpectrum(sourceImage, { gridW, kColors, sat, manualPalette 
 }
 
 export async function loadImageFromFile(file) {
+<<<<<<< HEAD
   // Intenta createImageBitmap (respeta EXIF). Si falla, fallback a Image.
   let bitmap;
   try {
@@ -126,6 +142,28 @@ export async function loadImageFromFile(file) {
     };
     img.src = url;
   });
+=======
+  // createImageBitmap respeta la orientación EXIF. Sin opciones de redimensionado
+  // para máxima compatibilidad en móvil (Safari iOS, Chrome antiguo).
+  try {
+    return await createImageBitmap(file, { imageOrientation: "from-image" });
+  } catch {
+    // Fallback: cargar mediante Image + objectURL
+    const url = URL.createObjectURL(file);
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("No se pudo decodificar la imagen"));
+      };
+      img.src = url;
+    });
+  }
+>>>>>>> fa699d704f08c1331de10857f75a330677b0b45e
 }
 
 export function loadImageFromUrl(url) {
