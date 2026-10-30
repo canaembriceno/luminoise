@@ -74,25 +74,35 @@ export function buildSpectrum(sourceImage, { gridW, kColors, sat, manualPalette 
   };
 }
 
-export function loadImageFromFile(file) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(file);
-    const img = new Image();
-    img.onload = async () => {
-      try {
-        await img.decode();
-      } catch {
-        // decode opcional; si falla seguimos con la imagen cargada
-      }
-      URL.revokeObjectURL(url);
-      resolve(img);
-    };
-    img.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error("No se pudo cargar la imagen"));
-    };
-    img.src = url;
-  });
+export async function loadImageFromFile(file) {
+  // createImageBitmap respeta la orientación EXIF y limita memoria antes de decodificar.
+  try {
+    return await createImageBitmap(file, {
+      imageOrientation: "from-image",
+      resizeWidth: 1280,
+      resizeQuality: "high",
+    });
+  } catch {
+    // Fallback para navegadores sin createImageBitmap(file, ...)
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = async () => {
+        try {
+          await img.decode();
+        } catch {
+          // decode opcional; si falla seguimos con la imagen cargada
+        }
+        URL.revokeObjectURL(url);
+        resolve(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error("No se pudo cargar la imagen"));
+      };
+      img.src = url;
+    });
+  }
 }
 
 export function loadImageFromUrl(url) {

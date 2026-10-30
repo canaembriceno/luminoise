@@ -1,0 +1,38 @@
+# Dependencias y builds
+node_modules/
+dist/
+build/
+out/
+
+# Secretos y credenciales (nunca subir)
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*
+*.keystore
+.netrc
+.npmrc
+.pypirc
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Entorno
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Multimedia de prueba (no subir)
+*.mp4
+app en telefono*.jpg

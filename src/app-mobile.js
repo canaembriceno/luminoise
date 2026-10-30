@@ -529,9 +529,15 @@ function loop(now) {
   const interval = 1000 / state.fps;
   if (now - lastTick < interval) return;
   lastTick = now;
-  propagate(beams, optics);
-  state.frame += 1;
-  paint();
+  try {
+    propagate(beams, optics);
+    state.frame += 1;
+    paint();
+  } catch (err) {
+    console.error("error en paint:", err);
+    setStats("error renderizando: " + (err && err.message ? err.message : err));
+    setPlaying(false);
+  }
   if (state.frame % 5 === 0) updateHud();
 }
 
@@ -544,6 +550,18 @@ btnEngine.addEventListener("click", toggleEngine);
 btnSeq.addEventListener("click", nextSequence);
 btnPng.addEventListener("click", exportPng);
 window.addEventListener("pointerdown", unlockAudio, { passive: true });
+
+// Diagnóstico: errores JS y promesas rechazadas nunca deben quedar ocultos
+window.addEventListener("error", (ev) => {
+  const msg = ev.message || ev.error && ev.error.message || String(ev);
+  console.error("error no controlado:", msg, ev.filename, ev.lineno);
+  setStats("error: " + msg);
+});
+window.addEventListener("unhandledrejection", (ev) => {
+  const msg = ev.reason && ev.reason.message ? ev.reason.message : String(ev.reason);
+  console.error("promesa rechazada:", msg);
+  setStats("error: " + msg);
+});
 
 engineLabel.textContent = getEngine() === "arcade" ? "Arcade" : "Anterior";
 Object.assign(state, randomize(currentSequence()));
