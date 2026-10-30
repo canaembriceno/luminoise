@@ -1,0 +1,30 @@
+:root {
+  --sisifo-bg: #0000f2;
+  --sisifo-bg-light: #1a1af5;
+  --sisifo-fg: #f5f5f5;
+  --sisifo-accent: #edff45;
+  --sisifo-accent-hover: #f0ff6a;
+  --sisifo-paper: #ffffff;
+  --sisifo-border: rgba(245, 245, 245, 0.15);
+  --sisifo-border-light: rgba(245, 245, 245, 0.1);
+  --sisifo-overlay: rgba(0, 0, 242, 0.85);
+  --font-display: 'Playfair Display', 'Times New Roman', serif;
+  --font-mono: 'Courier Prime', 'Courier New', monospace;
+  --text-xs: 0.625rem;
+  --text-sm: 0.6875rem;
+  --text-base: 0.8125rem;
+  --text-md: 0.875rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.3125rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: 3rem;
+  --text-4xl: 4rem;
+  --tracking-tight: 0.03em;
+  --tracking-mono: 0.05em;
+  --tracking-wide: 0.1em;
+  --tracking-wider: 0.18em;
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+}
