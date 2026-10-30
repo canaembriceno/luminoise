@@ -26,7 +26,7 @@ const btnPng = document.getElementById("btnPng");
 
 const AUTO_INTERVAL_MS = 333000;
 const AUTO_SEED_MS = 33000;
-const MAX_UPLOAD_BYTES = 25 * 1024 * 1024;
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
 const FRAME_W = 720;
 const FRAME_H = 960;
@@ -489,12 +489,11 @@ function exportPng() {
 function handleFile(file) {
   if (!file) return;
   if (!file.type.startsWith("image/")) {
-    setStats(`tipo no soportado: ${file.type || "desconocido"}`);
+    setStats("tipo de archivo no soportado");
     return;
   }
   if (file.size > MAX_UPLOAD_BYTES) {
-    const mb = (file.size / (1024 * 1024)).toFixed(1);
-    setStats(`imagen demasiado grande: ${mb} MB (máx ${MAX_UPLOAD_BYTES / (1024 * 1024)} MB)`);
+    setStats("imagen demasiado grande (máx 10 MB)");
     return;
   }
   loadImageFromFile(file)

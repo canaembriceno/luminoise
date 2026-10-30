@@ -49,12 +49,12 @@ header .spacer {
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-mono);
   color: rgba(245, 245, 245, 0.6);
-  white-space: nowrap;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: right;
   max-width: 70%;
-  min-width: 0;
 }
 
 #stats b {
