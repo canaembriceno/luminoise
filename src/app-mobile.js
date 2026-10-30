@@ -366,18 +366,7 @@ function buildBase(image) {
 }
 
 function setSource(image) {
-<<<<<<< HEAD
-  try {
-    const base = buildBase(image);
-    sourceCanvas = fitToFrame(base);
-  } catch (err) {
-    console.error("error en setSource:", err);
-    setStats("error procesando imagen: " + (err && err.message ? err.message : err));
-    return;
-  }
-=======
   sourceCanvas = fitToFrame(buildBase(image));
->>>>>>> fa699d704f08c1331de10857f75a330677b0b45e
   Object.assign(state, randomize(currentSequence()));
   rebuildAll();
   emptyEl.classList.add("is-hidden");
@@ -507,7 +496,6 @@ function handleFile(file) {
     setStats("imagen demasiado grande (máx 10 MB)");
     return;
   }
-  setStats("procesando imagen…");
   loadImageFromFile(file)
     .then(setSource)
     .catch((err) => {
@@ -517,26 +505,15 @@ function handleFile(file) {
 }
 
 async function loadDemo() {
-  setStats("cargando demo…");
   try {
     const img = await loadImageFromUrl("assets/photon.png");
     setSource(img);
-<<<<<<< HEAD
-  } catch (err) {
-    setStats("no se pudo cargar photon.png: " + (err && err.message ? err.message : err));
-    try {
-      const img = await loadImageFromUrl("assets/demo.jpg");
-      setSource(img);
-    } catch (err2) {
-      setStats("no se pudo cargar demo.jpg: " + (err2 && err2.message ? err2.message : err2));
-=======
   } catch {
     try {
       const img = await loadImageFromUrl("assets/demo.jpg");
       setSource(img);
     } catch {
       setStats("no se pudo cargar la demo");
->>>>>>> fa699d704f08c1331de10857f75a330677b0b45e
     }
   }
 }
