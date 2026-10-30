@@ -6,11 +6,15 @@ body {
 body {
   display: grid;
   grid-template-rows: auto 1fr;
+  /* Altura ESTABLE en iOS. "svh" es el viewport con las barras de Safari visibles
+     y no cambia nunca; "dvh" cambiaba al colapsar la barra (al tocar un boton)
+     y redimensionaba toda la app. */
   height: 100vh;
-  height: 100dvh;
+  height: 100svh;
   overflow: hidden;
   text-transform: uppercase;
   -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
   overscroll-behavior: none;
   touch-action: manipulation;
 }
