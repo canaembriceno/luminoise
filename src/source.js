@@ -75,7 +75,7 @@ export function buildSpectrum(sourceImage, { gridW, kColors, sat, manualPalette 
 }
 
 export async function loadImageFromFile(file) {
-  // createImageBitmap respeta la orientación EXIF y limita memoria antes de decodificar.
+  // Intento 1: createImageBitmap con opciones completas
   try {
     return await createImageBitmap(file, {
       imageOrientation: "from-image",
@@ -83,25 +83,30 @@ export async function loadImageFromFile(file) {
       resizeQuality: "high",
     });
   } catch {
-    // Fallback para navegadores sin createImageBitmap(file, ...)
-    return new Promise((resolve, reject) => {
-      const url = URL.createObjectURL(file);
-      const img = new Image();
-      img.onload = async () => {
-        try {
-          await img.decode();
-        } catch {
-          // decode opcional; si falla seguimos con la imagen cargada
-        }
-        URL.revokeObjectURL(url);
-        resolve(img);
-      };
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error("No se pudo cargar la imagen"));
-      };
-      img.src = url;
-    });
+    // Intento 2: createImageBitmap sin opciones (Safari iOS < 15.4)
+    try {
+      return await createImageBitmap(file);
+    } catch {
+      // Intento 3: <img> + objectURL + decode() (fallback universal)
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = async () => {
+          try {
+            await img.decode();
+          } catch {
+            // decode opcional
+          }
+          URL.revokeObjectURL(url);
+          resolve(img);
+        };
+        img.onerror = () => {
+          URL.revokeObjectURL(url);
+          reject(new Error("No se pudo decodificar la imagen"));
+        };
+        img.src = url;
+      });
+    }
   }
 }
 
