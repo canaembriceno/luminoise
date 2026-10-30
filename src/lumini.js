@@ -283,12 +283,24 @@ export function paintLumini(image, params) {
   const data = img.data;
   const seed = params.seed | 0;
 
-  kuwahara(data, w, h, params.smooth);
-  toneAdjust(data, params.sat, params.light);
-  interpretLight(data, params.intensity, params.hue, params.chroma);
-  const assign = paintRegions(data, params.colors, seed);
-  contour(data, assign, w, h, params.contour);
-  grain(data, params.grain, seed);
+  try { kuwahara(data, w, h, params.smooth); } catch (err) {
+    throw new Error("error en kuwahara: " + (err && err.message ? err.message : err));
+  }
+  try { toneAdjust(data, params.sat, params.light); } catch (err) {
+    throw new Error("error en toneAdjust: " + (err && err.message ? err.message : err));
+  }
+  try { interpretLight(data, params.intensity, params.hue, params.chroma); } catch (err) {
+    throw new Error("error en interpretLight: " + (err && err.message ? err.message : err));
+  }
+  try { const assign = paintRegions(data, params.colors, seed); } catch (err) {
+    throw new Error("error en paintRegions: " + (err && err.message ? err.message : err));
+  }
+  try { contour(data, assign, w, h, params.contour); } catch (err) {
+    throw new Error("error en contour: " + (err && err.message ? err.message : err));
+  }
+  try { grain(data, params.grain, seed); } catch (err) {
+    throw new Error("error en grain: " + (err && err.message ? err.message : err));
+  }
 
   cx.putImageData(img, 0, 0);
   return { canvas: cv, w, h };
